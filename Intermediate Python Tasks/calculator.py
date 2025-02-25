@@ -14,18 +14,39 @@ def calculate():
         
         # Parse the input string
         try:
-            parts = user_input.split()
-            
-            # Ensure input has exactly 3 parts: number operator number
-            if len(parts) != 3:
+            # Define the symbols you want to split by
+            delimiters = ['*', '-', '+', '/', ' ']
+
+            # Initialize an empty list to store the result
+            result = []
+
+            # Initialize a temporary string to build words
+            temp = ""
+
+            # Loop through each character in the text
+            for char in user_input:
+                if char in delimiters:
+                    if temp:
+                        result.append(temp)  # Add the word to the result
+                        temp = ""  # Reset the temporary string
+                    if char != ' ':
+                        result.append(char)  # Add the delimiter to the result (excluding space)
+                else:
+                    temp += char  # Build the word
+            # Add the last number if there's any
+            if temp:
+                result.append(temp)
+                
+            # Ensure input has exactly 3 result: number operator number
+            if len(result) != 3:
                 raise FormulaError("Formula must have exactly 3 elements: number operator number.")
             
             # Attempt to convert the first and third elements to float
-            num1 = float(parts[0])
-            num2 = float(parts[2])
+            num1 = float(result[0])
+            num2 = float(result[2])
             
             # Validate operator
-            operator = parts[1]
+            operator = result[1]
             if operator not in ['+', '-', '*', '/']:
                 raise FormulaError("Invalid operator. Only '+', '-', '*', and '/' are allowed.")
             

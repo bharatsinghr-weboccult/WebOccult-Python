@@ -7,9 +7,9 @@ class InvalidInputError(Exception):
         super().__init__(self.message)
 
 # Function to get the user's guess
-def get_user_guess():
+def get_user_guess(score):
     try:
-        user_input = int(input("Guess the secret number between 1 and 10: "))
+        user_input = int(input(f"You have {score} attempt left\nGuess the secret number between 1 and 10: "))
         
         # Check if the number is in the valid range
         if user_input < 1 or user_input > 10:
@@ -29,7 +29,7 @@ def play_game():
     while True:
         secret_number = random.randint(1, 10)
         guesses = 0
-        score = 0
+        score = 5
         
         print("I have selected a secret number between 1 and 10.")
         
@@ -39,10 +39,10 @@ def play_game():
             
             # Validate the guess
             while user_guess is None:
-                user_guess = get_user_guess()
+                user_guess = get_user_guess(score)
                 
-            guesses += 1
-            score = 5 - guesses  # Score is higher for fewer guesses
+            
+            score -= 1  # Score is higher for fewer guesses
             if user_guess == secret_number:
                 print(f"Congratulations! You've guessed the correct number {secret_number}!")
                 print(f"Your score: {score}")
@@ -54,7 +54,6 @@ def play_game():
                 print("Too low. Try again!")
             else:
                 print("Too high. Try again!")
-            
         # Ask if the user wants to play again
         play_again = input("Do you want to play again? (yes/no): ").strip().lower()
         if play_again != "yes":
